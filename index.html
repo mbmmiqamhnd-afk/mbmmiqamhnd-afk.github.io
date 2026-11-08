@@ -271,6 +271,30 @@
           </div>
         </div>
 
+                <div class="mt-8 pt-6 border-t border-stone-100 dark:border-slate-700">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-3">聯絡與交流</h3>
+          <div class="p-4 bg-stone-50 dark:bg-slate-700/50 rounded-2xl border border-stone-200/80 dark:border-slate-600 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              </div>
+              <div>
+                <div class="text-xs text-slate-400">電子信箱</div>
+                <a href="mailto:mbmmiqamhnd@gmail.com" class="text-sm font-semibold text-slate-800 dark:text-slate-100 hover:text-blue-600 transition">mbmmiqamhnd@gmail.com</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <a href="mailto:mbmmiqamhnd@gmail.com" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm inline-flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                寫信給我
+              </a>
+              <button id="btn-copy-email" class="px-3 py-1.5 bg-white dark:bg-slate-800 border border-stone-200 dark:border-slate-600 hover:bg-stone-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-medium transition">
+                複製信箱
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="mt-8 flex justify-center">
           <button id="about-back-to-articles-btn" class="px-5 py-2.5 bg-slate-900 text-white dark:bg-blue-600 hover:bg-slate-800 rounded-xl text-sm font-medium transition shadow-sm">
             瀏覽文章作品
@@ -284,8 +308,10 @@
   <!-- Footer -->
   <footer class="mt-20 border-t border-stone-200 dark:border-slate-800 py-10 bg-white/50 dark:bg-slate-900/50">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-      <div>
-        © 2026 郭勝隆的個人部落格・保留所有權利
+      <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+        <span>© 2026 郭勝隆的個人部落格・保留所有權利</span>
+        <span class="hidden sm:inline">•</span>
+        <a href="mailto:mbmmiqamhnd@gmail.com" class="text-blue-600 dark:text-blue-400 hover:underline">聯絡信箱：mbmmiqamhnd@gmail.com</a>
       </div>
       <div class="flex items-center gap-4">
         <span>極簡無廣告</span>
@@ -582,6 +608,25 @@
       }
     } catch (e) {
       updateThemeIcons(false);
+    }
+
+    
+    // Copy Email Listener
+    const btnCopyEmail = document.getElementById('btn-copy-email');
+    if (btnCopyEmail) {
+      btnCopyEmail.addEventListener('click', () => {
+        try {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText('mbmmiqamhnd@gmail.com');
+            showToast('📬 信箱已複製至剪貼簿：mbmmiqamhnd@gmail.com');
+          } else {
+            document.execCommand('copy');
+            showToast('📬 信箱已複製！');
+          }
+        } catch (e) {
+          showToast('mbmmiqamhnd@gmail.com');
+        }
+      });
     }
 
     // Initial render
