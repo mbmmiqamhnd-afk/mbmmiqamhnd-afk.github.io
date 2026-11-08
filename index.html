@@ -139,8 +139,14 @@
               <span class="text-slate-500 dark:text-slate-400">發表頻率</span>
               <span class="text-blue-600 dark:text-blue-400 font-medium">持續累積更新</span>
             </div>
-            <div class="pt-2 border-t border-stone-100 dark:border-slate-700 text-xs text-slate-400">
-              極簡純粹・永久公開閱讀
+            <div class="pt-3 border-t border-stone-100 dark:border-slate-700">
+              <div class="text-xs text-slate-400 mb-1.5">讀者交流信箱</div>
+              <div class="flex items-center justify-between gap-2 bg-stone-50 dark:bg-slate-700/60 p-2 rounded-xl border border-stone-200/70 dark:border-slate-600">
+                <span class="text-xs font-mono font-medium text-slate-700 dark:text-slate-200 truncate">mbmmiqamhnd@gmail.com</span>
+                <button id="btn-copy-email-hero" class="shrink-0 px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">
+                  複製信箱
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -284,7 +290,7 @@
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <a href="mailto:mbmmiqamhnd@gmail.com" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm inline-flex items-center gap-1">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=mbmmiqamhnd@gmail.com" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm inline-flex items-center gap-1">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 寫信給我
               </a>
@@ -311,7 +317,15 @@
       <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
         <span>© 2026 郭勝隆的個人部落格・保留所有權利</span>
         <span class="hidden sm:inline">•</span>
-        <a href="mailto:mbmmiqamhnd@gmail.com" class="text-blue-600 dark:text-blue-400 hover:underline">聯絡信箱：mbmmiqamhnd@gmail.com</a>
+        <div class="flex items-center gap-2">
+          <span class="text-slate-600 dark:text-slate-300">聯絡信箱：mbmmiqamhnd@gmail.com</span>
+          <button id="btn-copy-email-footer" class="px-2 py-0.5 bg-stone-200 dark:bg-slate-700 hover:bg-stone-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 rounded text-xs font-medium transition">
+            複製
+          </button>
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=mbmmiqamhnd@gmail.com" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition">
+            開啟Gmail寄信
+          </a>
+        </div>
       </div>
       <div class="flex items-center gap-4">
         <span>極簡無廣告</span>
@@ -611,23 +625,36 @@
     }
 
     
-    // Copy Email Listener
-    const btnCopyEmail = document.getElementById('btn-copy-email');
-    if (btnCopyEmail) {
-      btnCopyEmail.addEventListener('click', () => {
-        try {
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText('mbmmiqamhnd@gmail.com');
-            showToast('📬 信箱已複製至剪貼簿：mbmmiqamhnd@gmail.com');
-          } else {
-            document.execCommand('copy');
-            showToast('📬 信箱已複製！');
-          }
-        } catch (e) {
-          showToast('mbmmiqamhnd@gmail.com');
+    // Copy Email Function
+    function copyEmailToClipboard() {
+      try {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText('mbmmiqamhnd@gmail.com');
+          showToast('📬 已複製信箱：mbmmiqamhnd@gmail.com');
+        } else {
+          const tempInput = document.createElement('input');
+          tempInput.value = 'mbmmiqamhnd@gmail.com';
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          document.execCommand('copy');
+          document.body.removeChild(tempInput);
+          showToast('📬 已複製信箱：mbmmiqamhnd@gmail.com');
         }
-      });
+      } catch (e) {
+        showToast('mbmmiqamhnd@gmail.com');
+      }
     }
+
+    const copyBtns = ['btn-copy-email', 'btn-copy-email-hero', 'btn-copy-email-footer'];
+    copyBtns.forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          copyEmailToClipboard();
+        });
+      }
+    });
 
     // Initial render
     renderArticles();
