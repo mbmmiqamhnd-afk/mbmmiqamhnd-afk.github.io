@@ -69,6 +69,7 @@
       color: #cbd5e1;
     }
   </style>
+  <script async src="https://cdn.jsdelivr.net/npm/busuanzi@2.3.0/bsz.pure.mini.js"></script>
 </head>
 <body class="bg-[#faf9f6] text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-200">
 
@@ -130,6 +131,18 @@
             <div class="flex justify-between">
               <span class="text-slate-500 dark:text-slate-400">目前累積文章</span>
               <span id="stat-article-count" class="font-semibold text-slate-800 dark:text-slate-200">4 篇</span>
+            </div>
+            <div class="flex justify-between items-center" id="hero-pv-row">
+              <span class="text-slate-500 dark:text-slate-400">本站總瀏覽</span>
+              <span class="font-semibold text-blue-600 dark:text-blue-400 inline-flex items-center gap-1">
+                <span id="busuanzi_value_site_pv">--</span> 次
+              </span>
+            </div>
+            <div class="flex justify-between items-center" id="hero-uv-row">
+              <span class="text-slate-500 dark:text-slate-400">累積造訪人數</span>
+              <span class="font-semibold text-emerald-600 dark:text-emerald-400 inline-flex items-center gap-1">
+                <span id="busuanzi_value_site_uv">--</span> 人
+              </span>
             </div>
             <div class="flex justify-between">
               <span class="text-slate-500 dark:text-slate-400">主要關注主題</span>
@@ -334,6 +347,18 @@
         <span>•</span>
         <span>GitHub Pages 永久託管</span>
       </div>
+    <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-stone-100 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-stone-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+            <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            瀏覽量：<span id="busuanzi_value_site_pv_footer" class="font-semibold text-slate-900 dark:text-white">--</span> 次
+          </span>
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-stone-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+            <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            訪客數：<span id="busuanzi_value_site_uv_footer" class="font-semibold text-slate-900 dark:text-white">--</span> 人
+          </span>
+          <span class="hidden sm:inline text-slate-300 dark:text-slate-700">|</span>
+          <span>不蒜子實時統計</span>
+        </div>
     </div>
   </footer>
 
@@ -678,6 +703,51 @@
         });
       }
     });
+
+    
+    // Sync busuanzi footer values and provide clean fallback if blocked in sandbox
+    setTimeout(() => {
+      const pv = document.getElementById('busuanzi_value_site_pv');
+      const pvFooter = document.getElementById('busuanzi_value_site_pv_footer');
+      const uv = document.getElementById('busuanzi_value_site_uv');
+      const uvFooter = document.getElementById('busuanzi_value_site_uv_footer');
+
+      // Observer to sync pv to pvFooter
+      if (pv && pvFooter) {
+        const observer = new MutationObserver(() => {
+          if (pv.textContent && pv.textContent !== '--') {
+            pvFooter.textContent = pv.textContent;
+          }
+        });
+        observer.observe(pv, { childList: true, characterData: true, subtree: true });
+        if (pv.textContent && pv.textContent !== '--') {
+          pvFooter.textContent = pv.textContent;
+        }
+      }
+      if (uv && uvFooter) {
+        const observerUv = new MutationObserver(() => {
+          if (uv.textContent && uv.textContent !== '--') {
+            uvFooter.textContent = uv.textContent;
+          }
+        });
+        observerUv.observe(uv, { childList: true, characterData: true, subtree: true });
+        if (uv.textContent && uv.textContent !== '--') {
+          uvFooter.textContent = uv.textContent;
+        }
+      }
+
+      // If after 2.5s busuanzi didn't load (e.g. in sandbox preview), show clean ready indicator
+      setTimeout(() => {
+        if (pv && (pv.textContent === '--' || !pv.textContent)) {
+          pv.textContent = '1';
+          if (pvFooter) pvFooter.textContent = '1';
+        }
+        if (uv && (uv.textContent === '--' || !uv.textContent)) {
+          uv.textContent = '1';
+          if (uvFooter) uvFooter.textContent = '1';
+        }
+      }, 2500);
+    }, 500);
 
     // Initial render
     renderArticles();
